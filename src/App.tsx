@@ -1,26 +1,89 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Suspense, useState } from 'react';
+import { Menu, Icon, Button, Spin, Layout } from 'antd';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import EffectAsyncPage from './components/hooks/useEffectAsync';
+import RefPage from './components/hooks/useRef';
+import LazyLoadPage from './components/suspense/lazyLoad';
+import { routerConfig } from './router';
 import './App.css';
+const { Content, Header, Sider } = Layout;
+const { SubMenu } = Menu;
 
 const App: React.FC = () => {
+  const [collapsed, setCollapsed] = useState<boolean>(false);
+  const [logoFontSize, setLogoFontSize] = useState<string>('24px');
+
+  const onCollapsedClick = () => {
+    setLogoFontSize(logoFontSize === '24px' ? '12px' : '24px');
+    setCollapsed(!collapsed);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout>
+      <Router>
+        <Sider trigger={null} collapsible collapsed={collapsed}>
+          <div
+            style={{ color: '#fff', fontSize: logoFontSize, textAlign: 'center', lineHeight: '36px', height: '36px' }}
+          >
+            yard
+          </div>
+          <Menu defaultSelectedKeys={['/hooks/useEffectAsync']} defaultOpenKeys={['hooks']} mode="inline" theme="dark">
+            {routerConfig.map(config => {
+              if (config.hasSubMenu === true) {
+                return (
+                  <SubMenu title={<span>{config.name}</span>} key={config.name}>
+                    {/* <SpreadRouterConfig configs={config.children} /> */}
+                    {config.children.map(item => (
+                      <Menu.Item key={item.path}>
+                        <Link to={item.path}>{item.name}</Link>
+                      </Menu.Item>
+                    ))}
+                  </SubMenu>
+                );
+              }
+              return (
+                <Menu.Item key={config.path}>
+                  <Link to={config.path}>{config.name}</Link>
+                </Menu.Item>
+              );
+            })}
+          </Menu>
+        </Sider>
+        <Layout>
+          <Header style={{ background: '#fff', padding: 0, height: '64px' }}>
+            <Icon
+              className="trigger"
+              type={collapsed ? 'menu-unfold' : 'menu-fold'}
+              onClick={onCollapsedClick}
+              style={{ margin: '0 16px' }}
+            />
+          </Header>
+          <Content
+            style={{
+              margin: '24px 16px',
+              padding: 24,
+              background: '#fff',
+              minHeight: 'calc(100vh - 112px)',
+            }}
+          >
+            <Switch>
+              <Route path="/hooks/useEffectAsync">
+                <EffectAsyncPage />
+              </Route>
+              <Route path="/hooks/useRef">
+                <RefPage />
+              </Route>
+              <Route path="/suspense/lazyload">
+                <LazyLoadPage />
+              </Route>
+              <Route path="/">
+                <div>home</div>
+              </Route>
+            </Switch>
+          </Content>
+        </Layout>
+      </Router>
+    </Layout>
   );
-}
+};
 
 export default App;
