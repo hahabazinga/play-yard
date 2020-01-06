@@ -2,6 +2,7 @@ import * as React from 'react';
 import EffectAsyncPage from '../components/hooks/useEffectAsync';
 import RefPage from '../components/hooks/useRef';
 import LazyLoadPage from '../components/suspense/lazyLoad';
+import WebComponentsSquare from '../components/webComponents';
 
 type RouterConfigType =
   | {
@@ -48,6 +49,18 @@ export const routerConfig: RouterConfigType[] = [
         name: 'lazyload',
         path: '/suspense/lazyload',
         component: <LazyLoadPage />,
+      },
+    ],
+  },
+  {
+    hasSubMenu: true,
+    name: 'web components',
+    children: [
+      {
+        hasSubMenu: false,
+        name: 'square',
+        path: '/webComponents/square',
+        component: <WebComponentsSquare />,
       },
     ],
   },

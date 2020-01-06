@@ -1,17 +1,29 @@
 import React, { Suspense, useState } from 'react';
 import { Menu, Icon, Button, Spin, Layout } from 'antd';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  RouteComponentProps,
+  useHistory,
+  useLocation,
+} from 'react-router-dom';
 import EffectAsyncPage from './components/hooks/useEffectAsync';
 import RefPage from './components/hooks/useRef';
 import LazyLoadPage from './components/suspense/lazyLoad';
 import { routerConfig } from './router';
 import './App.css';
+import WebComponentsSquare from './components/webComponents';
+
 const { Content, Header, Sider } = Layout;
 const { SubMenu } = Menu;
 
 const App: React.FC = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [logoFontSize, setLogoFontSize] = useState<string>('24px');
+  const history = useHistory();
+  const location = useLocation();
 
   const onCollapsedClick = () => {
     setLogoFontSize(logoFontSize === '24px' ? '12px' : '24px');
@@ -19,54 +31,63 @@ const App: React.FC = () => {
   };
   return (
     <Layout>
-      <Router>
-        <Sider trigger={null} collapsible collapsed={collapsed}>
-          <div
-            style={{ color: '#fff', fontSize: logoFontSize, textAlign: 'center', lineHeight: '36px', height: '36px' }}
-          >
-            yard
-          </div>
-          <Menu defaultSelectedKeys={['/hooks/useEffectAsync']} defaultOpenKeys={['hooks']} mode="inline" theme="dark">
+      <Sider trigger={null} collapsible collapsed={collapsed}>
+        <div style={{ color: '#fff', fontSize: logoFontSize, textAlign: 'center', lineHeight: '36px', height: '36px' }}>
+          yard
+        </div>
+        <Menu
+          defaultSelectedKeys={['/hooks/useEffectAsync']}
+          defaultOpenKeys={['hooks']}
+          selectedKeys={[location.pathname]}
+          mode="inline"
+          theme="dark"
+        >
+          {routerConfig.map(config => {
+            if (config.hasSubMenu === true) {
+              return (
+                <SubMenu title={<span>{config.name}</span>} key={config.name}>
+                  {/* <SpreadRouterConfig configs={config.children} /> */}
+                  {config.children.map(item => (
+                    <Menu.Item key={item.path}>
+                      <Link to={item.path}>{item.name}</Link>
+                    </Menu.Item>
+                  ))}
+                </SubMenu>
+              );
+            }
+            return (
+              <Menu.Item key={config.path}>
+                <Link to={config.path}>{config.name}</Link>
+              </Menu.Item>
+            );
+          })}
+        </Menu>
+      </Sider>
+      <Layout>
+        <Header style={{ background: '#fff', padding: 0, height: '64px' }}>
+          <Icon
+            className="trigger"
+            type={collapsed ? 'menu-unfold' : 'menu-fold'}
+            onClick={onCollapsedClick}
+            style={{ margin: '0 16px' }}
+          />
+        </Header>
+        <Content
+          style={{
+            margin: '24px 16px',
+            padding: 24,
+            background: '#fff',
+            minHeight: 'calc(100vh - 112px)',
+          }}
+        >
+          <Switch>
             {routerConfig.map(config => {
               if (config.hasSubMenu === true) {
-                return (
-                  <SubMenu title={<span>{config.name}</span>} key={config.name}>
-                    {/* <SpreadRouterConfig configs={config.children} /> */}
-                    {config.children.map(item => (
-                      <Menu.Item key={item.path}>
-                        <Link to={item.path}>{item.name}</Link>
-                      </Menu.Item>
-                    ))}
-                  </SubMenu>
-                );
+                return config.children.map(child => <Route path={child.path}>{child.component}</Route>);
               }
-              return (
-                <Menu.Item key={config.path}>
-                  <Link to={config.path}>{config.name}</Link>
-                </Menu.Item>
-              );
+              return <Route path={config.path}>{config.component}</Route>;
             })}
-          </Menu>
-        </Sider>
-        <Layout>
-          <Header style={{ background: '#fff', padding: 0, height: '64px' }}>
-            <Icon
-              className="trigger"
-              type={collapsed ? 'menu-unfold' : 'menu-fold'}
-              onClick={onCollapsedClick}
-              style={{ margin: '0 16px' }}
-            />
-          </Header>
-          <Content
-            style={{
-              margin: '24px 16px',
-              padding: 24,
-              background: '#fff',
-              minHeight: 'calc(100vh - 112px)',
-            }}
-          >
-            <Switch>
-              <Route path="/hooks/useEffectAsync">
+            {/* <Route path="/hooks/useEffectAsync">
                 <EffectAsyncPage />
               </Route>
               <Route path="/hooks/useRef">
@@ -75,13 +96,16 @@ const App: React.FC = () => {
               <Route path="/suspense/lazyload">
                 <LazyLoadPage />
               </Route>
-              <Route path="/">
-                <div>home</div>
-              </Route>
-            </Switch>
-          </Content>
-        </Layout>
-      </Router>
+              <Route path="/webComponents/square">
+                <WebComponentsSquare />
+              </Route> */}
+
+            <Route path="/">
+              <div>home</div>
+            </Route>
+          </Switch>
+        </Content>
+      </Layout>
     </Layout>
   );
 };
