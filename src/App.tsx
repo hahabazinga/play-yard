@@ -1,20 +1,9 @@
 import React, { Suspense, useState } from 'react';
 import { Menu, Icon, Button, Spin, Layout } from 'antd';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  RouteComponentProps,
-  useHistory,
-  useLocation,
-} from 'react-router-dom';
-import EffectAsyncPage from './components/hooks/useEffectAsync';
-import RefPage from './components/hooks/useRef';
-import LazyLoadPage from './components/suspense/lazyLoad';
+import { BrowserRouter as Router, Switch, Route, Link, useHistory, useLocation } from 'react-router-dom';
+
 import { routerConfig } from './router';
 import './App.css';
-import WebComponentsSquare from './components/webComponents';
 
 const { Content, Header, Sider } = Layout;
 const { SubMenu } = Menu;

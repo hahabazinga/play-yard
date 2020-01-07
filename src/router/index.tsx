@@ -3,6 +3,7 @@ import EffectAsyncPage from '../components/hooks/useEffectAsync';
 import RefPage from '../components/hooks/useRef';
 import LazyLoadPage from '../components/suspense/lazyLoad';
 import WebComponentsSquare from '../components/webComponents';
+import RouterPage from '../components/router';
 
 type RouterConfigType =
   | {
@@ -61,6 +62,18 @@ export const routerConfig: RouterConfigType[] = [
         name: 'square',
         path: '/webComponents/square',
         component: <WebComponentsSquare />,
+      },
+    ],
+  },
+  {
+    hasSubMenu: true,
+    name: 'react-router',
+    children: [
+      {
+        hasSubMenu: false,
+        name: 'router',
+        path: '/router/index',
+        component: <RouterPage />,
       },
     ],
   },

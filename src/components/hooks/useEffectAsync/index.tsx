@@ -3,6 +3,9 @@ import { useFetchUserList } from '../../../hooks/useEffectAsync';
 import { Card, Spin, Alert, Button } from 'antd';
 import { UserType } from '../../../fakeApi/user';
 
+/**
+ * this example shows how the useEffectAsync hooks works
+ */
 const EffectAsyncPage: React.FC = () => {
   const { data, refetch, loading, error } = useFetchUserList<UserType>();
   return (

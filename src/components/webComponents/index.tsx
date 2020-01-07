@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { Button } from 'antd';
 import './square';
 
+/**
+ * custom-square为webcomponents
+ */
 const WebComponentSquare = () => {
   const [l, setL] = useState(100);
   return (

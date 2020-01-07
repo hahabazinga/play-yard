@@ -1,4 +1,10 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## react的练习项目.
+已经包含下列内容的简单场景
+1. useEffectAsync
+2. lazy+suspense
+3. react中使用webcomponents
+4. react-router
 
 ## Available Scripts
 
