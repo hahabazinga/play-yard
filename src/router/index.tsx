@@ -4,6 +4,7 @@ import RefPage from '../components/hooks/useRef';
 import LazyLoadPage from '../components/suspense/lazyLoad';
 import WebComponentsSquare from '../components/webComponents';
 import RouterPage from '../components/router';
+import FontArea from '../components/hooks/useReducer'
 
 type RouterConfigType =
   | {
@@ -38,6 +39,12 @@ export const routerConfig: RouterConfigType[] = [
         name: 'ref',
         path: '/hooks/useRef',
         component: <RefPage />,
+      },
+      {
+        hasSubMenu: false,
+        name: 'useReducer',
+        path: '/hooks/useReducer',
+        component: <FontArea />,
       },
     ],
   },
