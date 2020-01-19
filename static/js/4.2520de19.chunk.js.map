@@ -1,0 +1,1 @@
+{"version":3,"sources":["components/suspense/lazyLoad/OtherComponent.tsx"],"names":["OtherComponent"],"mappings":"4GAAA,kBAIeA,UAHQ,WACrB,OAAO","file":"static/js/4.2520de19.chunk.js","sourcesContent":["import * as React from 'react';\r\nconst OtherComponent = () => {\r\n  return <div>ohter component</div>;\r\n};\r\nexport default OtherComponent;\r\n"],"sourceRoot":""}
