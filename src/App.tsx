@@ -1,6 +1,6 @@
-import React, { Suspense, useState } from 'react';
-import { Menu, Icon, Button, Spin, Layout } from 'antd';
-import { BrowserRouter as Router, Switch, Route, Link, useHistory, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Menu, Icon, Layout } from 'antd';
+import { Switch, Route, Link, useHistory, useLocation } from 'react-router-dom';
 
 import { routerConfig } from './router';
 import './App.css';
@@ -11,7 +11,7 @@ const { SubMenu } = Menu;
 const App: React.FC = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [logoFontSize, setLogoFontSize] = useState<string>('24px');
-  const history = useHistory();
+  // const history = useHistory();
   const location = useLocation();
 
   const onCollapsedClick = () => {
@@ -100,3 +100,7 @@ const App: React.FC = () => {
 };
 
 export default App;
+
+
+
+

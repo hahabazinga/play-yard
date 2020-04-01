@@ -1,5 +1,4 @@
 import { useEffect, useState, DependencyList } from 'react';
-import axios, { AxiosRequestConfig } from 'axios';
 import { getUser } from '../fakeApi/user';
 
 type AsyncCallback = (...args: any[]) => Promise<any>;
@@ -26,7 +25,7 @@ const useEffectAsync = <T>(fn: AsyncCallback, deps?: DependencyList) => {
       }
     };
     cb();
-  }, [...(deps || []), fetchId]);
+  }, [fetchId, fn]);
   return {
     data,
     loading,

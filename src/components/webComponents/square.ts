@@ -1,4 +1,7 @@
 class Square extends HTMLElement {
+  /**
+   * observedAttribute() get函数返回一个数组，包含需要监听的属性， 属性变化后触发attributeChangedCallback
+   */
   static get observedAttributes() {
     return ['l', 'c'];
   }

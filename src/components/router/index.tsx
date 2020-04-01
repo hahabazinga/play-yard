@@ -1,5 +1,17 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch, useParams } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+  useParams,
+  useHistory,
+  useLocation,
+  Redirect,
+  RouteProps,
+} from 'react-router-dom';
+import { Button } from 'antd';
 
 /**
  * this example is for react-router
@@ -8,6 +20,7 @@ export default function RouterPage() {
   return (
     <Router>
       <div>
+        <AuthButton />
         <ul>
           <li>
             <Link to="/home">Home</Link>
@@ -23,11 +36,14 @@ export default function RouterPage() {
           <Route path="/about">
             <About />
           </Route>
-          <Route path="/topics">
+          <AtuhRoute path="/topics">
             <Topics />
-          </Route>
+          </AtuhRoute>
           <Route path="/home">
             <Home />
+          </Route>
+          <Route path="/login">
+            <LoginPage />
           </Route>
         </Switch>
       </div>
@@ -44,16 +60,13 @@ function About() {
 }
 
 function Topics() {
-  let match = useRouteMatch();
-  console.log(match);
+  const match = useRouteMatch();
   if (match === null) {
     return <></>;
   }
-
   return (
     <div>
       <h2>Topics</h2>
-
       <ul>
         <li>
           <Link to={`${match.url}/components`}>Components</Link>
@@ -80,6 +93,77 @@ function Topics() {
 }
 
 function Topic() {
-  let { topicId } = useParams();
+  const { topicId } = useParams();
   return <h3>Requested topic ID: {topicId}</h3>;
+}
+
+/**
+ * 登录页面
+ */
+function LoginPage() {
+  const history = useHistory();
+  const location = useLocation();
+
+  // 从location中取出上一页，如果没有则跳至首页
+  const { from } = location.state || { from: { pathname: '/' } };
+  const login = () => fakeAuth.login(() => history.replace(from));
+  return (
+    <div>
+      <p>you must login to view page at {from.pathname}</p>
+      <Button onClick={login}>login</Button>
+    </div>
+  );
+}
+
+const fakeAuth = {
+  isAuthenticated: false,
+  login: (cb?: Function) => {
+    setTimeout(() => {
+      fakeAuth.isAuthenticated = true;
+      cb && cb();
+    });
+  },
+  loginout: (cb: Function) => {
+    setTimeout(() => {
+      fakeAuth.isAuthenticated = false;
+      cb && cb();
+    });
+  },
+};
+
+function AuthButton() {
+  const history = useHistory();
+  const location = useLocation();
+
+  const { from } = location.state || { from: { pathname: '/' } };
+  const login = () => fakeAuth.login(() => history.replace(from));
+
+  return fakeAuth.isAuthenticated ? (
+    <p>
+      welcome
+      <Button
+        onClick={() => {
+          fakeAuth.loginout(() => history.push('/'));
+        }}
+      >
+        sign out
+      </Button>
+    </p>
+  ) : (
+    <p>
+      need login first<Button onClick={login}>login</Button>
+    </p>
+  );
+}
+
+function AtuhRoute(props: RouteProps) {
+  const { children, ...rest } = props;
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        fakeAuth.isAuthenticated ? children : <Redirect to={{ pathname: '/login', state: { from: location } }} />
+      }
+    />
+  );
 }
